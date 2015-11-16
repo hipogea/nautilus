@@ -11,13 +11,10 @@ class DireccionesController extends Controller
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+    public function filters()
+    {
+        return array('accessControl',array('CrugeAccessControlFilter'));
+    }
 
 
 	public function actioncargaprovincias()
@@ -59,7 +56,8 @@ class DireccionesController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
+        Yii::app()->user->loginUrl = array("/cruge/ui/login");
+        return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
