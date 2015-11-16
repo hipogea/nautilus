@@ -1,6 +1,6 @@
 <?php
 
-class Factur extends CActiveRecord
+class Factur extends ModeloGeneral
 {
 	/**
 	 * @return string the associated database table name
