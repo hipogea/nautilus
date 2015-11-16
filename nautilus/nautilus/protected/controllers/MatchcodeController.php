@@ -7,31 +7,21 @@ class MatchcodeController extends Controller
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+    public function filters()
+    {
+        return array('accessControl',array('CrugeAccessControlFilter'));
+    }
 
-	
-	
-	public function accessRules()
-	{
+    public function accessRules()
+    {
+        Yii::app()->user->loginUrl = array("/cruge/ui/login");
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
+
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('Visualiza','recibevalorsimple','Excel','defaulte','eliminasesiones','pide','pintamaterial','pintaactivo','pintaequipo','recibevalor1','creadetalle','relaciona1','Relaciona','Recibevalor','Recibevalores','create','update'),
 				'users'=>array('@'),
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
+
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),

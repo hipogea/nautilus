@@ -11,21 +11,15 @@ class VwGuiaController extends Controller
 	/**
 	 * @return array action filters
 	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+    public function filters()
+    {
+        return array('accessControl',array('CrugeAccessControlFilter'));
+    }
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
+
+    public function accessRules()
+    {
+        Yii::app()->user->loginUrl = array("/cruge/ui/login");
 		return array(
 			
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
