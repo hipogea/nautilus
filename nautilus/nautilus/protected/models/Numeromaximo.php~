@@ -1,0 +1,80 @@
+<?php
+
+
+class Numeromaximo 
+{
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return Inventario the static model class
+	 */
+	 
+	public $codigosap ; //el codigo del archivo a poner correlativo 
+	public $rutadearchivos;  //la ruta de la carpera a nalizar
+	public $extension; //guarad ala exotension delos archivos 
+	public $rutarelativa;
+	
+	
+	/**
+	 * @return string the associated database table name
+	 */
+	
+/*	public function __construct($pcsap,$pruta,$pextension) {
+				$this->codigosap=trim($pcsap);
+				$this->rutadearchivos=trim($pruta);
+				$this->extension=trim($pextension);
+			//	$this->rutarelativa=Yii::app()->params['rutafotosinventario_'];
+		*/		
+				
+			
+	public  function BaseDatos() {
+	            
+				//Yii::app()->db->connectionString
+			//	$this->rutarelativa=Yii::app()->params['rutafotosinventario_'];
+				$retazo=explode(':',':'. Yii::app()->db->connectionString);
+				//return $retazo[1];
+				print_r( Yii::app()->db->schema->tableNames);
+				} 
+				
+		public  function numero($modelito,$campo,$aliascampo,$anchocampo) {
+	            
+				//Yii::app()->db->connectionString
+			//	$this-public function numerom() {
+	  // $modelito =new Mot;
+	  
+					$criteria=new CDbCriteria;
+					$criteria->select='max('.$campo.') AS '.$aliascampo.'';
+					$row = $modelito->model()->find($criteria);
+					$somevariable =is_null($row)?1:$row['maximovalor']+1;			
+					//return $somevariable;
+					//return str_pad($somevariable,$anchocampo,"0",STR_PAD_LEFT);
+			//return "0000000000".$somevariable;
+	}
+		                 
+  public  function numero_aleatorio($inicio,$final) {		
+				mt_srand (time());	
+				
+				 return  mt_rand($inicio,$final);
+
+							}
+
+  public  function numerounico() {		
+					
+				
+				 return  microtime(TRUE)*10000;
+
+							}						
+							
+							
+							
+		
+				} 
+		
+	
+
+
+	
+	
+	
+	
+	

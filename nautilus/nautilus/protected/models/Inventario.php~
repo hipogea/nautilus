@@ -1,0 +1,412 @@
+<?php
+
+/**
+ * This is the model class for table "inventario".
+ *
+ * The followings are the available columns in table 'inventario':
+ * @property string $idinventario
+ * @property string $codigo
+ * @property string $c_estado
+ * @property string $codep
+ * @property string $comentario
+ * @property string $fecha
+ * @property string $coddocu
+ * @property string $creadopor
+ * @property string $creadoel
+ * @property string $modificadopor
+ * @property string $modificadoel
+ * @property string $codlugar
+ * @property string $codigosap
+ * @property string $codigoaf
+ * @property string $descripcion
+ * @property string $marca
+ * @property string $modelo
+ * @property string $serie
+ * @property string $clasefoto
+ * @property string $codigopadre
+ * @property string $numerodocumento
+ * @property string $adicional
+ * @property string $codigoafant
+ * @property string $posicion
+ * @property string $codcentro
+ * @property string $codcentrooriginal
+ * @property string $codeporiginal
+ * @property string $rocoto
+ * @property string $codepanterior
+ * @property string $codcentroanterior
+ * @property string $clase
+ * @property string $baja
+ * @property string $n_direc
+ */
+class Inventario extends CActiveRecord
+{
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return Inventario the static model class
+	 */
+	 
+	public $imagen ;
+	public $lugares_lugar;
+	public $codlugar_;
+	public $documento_desdocu;
+	
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'inventario';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			//array('idinventario', 'required'),
+			array('codigoaf','required','message'=>'Debes de llenar la plaquita'),
+			array('codarea','required','message'=>'Debes de llenar el area responsable'),
+			array('codlugar','required','message'=>'Debes de llenar el lugar actual'),			
+			array('tipo','required','message'=>'Debes de llenar el tipo'),
+			array('codep','required','message'=>'Debes de indicar de donde es este activo'),
+			array('descripcion','required','message'=>'...y la descripcion ... ?'),
+			array('descripcion','required','message'=>'...y la descripcion ... ?'),
+			array('fecha','required','message'=>'...y la fecha ... ?'),
+			array('coddocu','required','message'=>'Indica con que documento estas actualizando o creando el inventario'),
+			array('codigo, codlugar, codigosap, posicion', 'length', 'max'=>6),
+			array('c_estado, rocoto, baja', 'length', 'max'=>1),
+			array('codestado', 'length', 'max'=>2),
+			array('codep, coddocu, codeporiginal, codepanterior', 'length', 'max'=>3),
+			array('creadopor, modificadopor, modelo', 'length', 'max'=>25),
+			array('creadoel, modificadoel, serie, numerodocumento', 'length', 'max'=>20),
+			array('codigoaf', 'unique', 'attributeName'=> 'codigoaf', 'caseSensitive' => 'true','message'=>'Este numero de placa ya esta registrada'),
+			array('codigoaf', 'length', 'max'=>13),
+			array('codigoaf', 'match', 'pattern'=>'/90-3[0-5]{1}00-[0-9]{5}/','message'=>'El codigo de placa no es el correcto'),			
+			array('descripcion', 'length', 'max'=>40),
+			array('marca, adicional', 'length', 'max'=>15),
+			array('clasefoto', 'length', 'max'=>30),
+			array('codigopadre', 'length', 'max'=>5),
+			array('codigoafant', 'length', 'max'=>10),
+			array('codcentro, codcentrooriginal, codcentroanterior, clase', 'length', 'max'=>4),
+			array('comentario,codigoaf, fecha, n_direc,codarea', 'safe'),
+			/*array('imagen', 'file',
+                'allowEmpty' => false,
+                'types'=> 'jpg',
+                'maxSize' => 1024 , // 10MB                
+                'tooLarge' => 'El archivo es demasiado pesado.',                
+            ),*/
+			
+           // array('imagen', 'file', 'types'=>'jpg, gif, png'),       
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array('idinventario, codigo,tipo,c_estado,tienecarter, codep, comentario, fecha, coddocu, creadopor, creadoel, modificadopor, modificadoel,  codigosap, codigoaf, descripcion, marca, modelo, serie, clasefoto, codigopadre, numerodocumento, adicional, codigoafant, posicion, codcentro, codcentrooriginal, codeporiginal, rocoto, codepanterior, codcentroanterior, clase, baja, n_direc', 'safe', 'on'=>'search'),
+		   array('codestado,lugares_lugar,codlugar,tienecarter',  'safe', 'on'=>'search'),
+		);
+	}
+
+	
+	
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+		'barcoactual'=>array(self::BELONGS_TO, 'Embarcaciones', 'codep'),
+		'barcoanterior'=>array(self::BELONGS_TO, 'Embarcaciones', 'codepanterior'),
+		'barcooriginal'=>array(self::BELONGS_TO, 'Embarcaciones', 'codeporiginal'),
+		'lugares'=>array(self::BELONGS_TO, 'Lugares', 'codlugar'),
+		'documento'=>array(self::BELONGS_TO, 'Documentos', 'coddocu'),
+		'area'=>array(self::BELONGS_TO, 'Areas', 'codarea'),
+		'estado'=>array(self::BELONGS_TO, 'Estado', array('codestado','codigodoc')),
+		);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(			
+			'c_estado' => 'C Estado',
+			'codep' => 'Embarcacion actual',
+			'codarea'=>'Area responsable',
+			'comentario' => 'Comentario',
+			'fecha' => 'Fecha',			
+			'codlugar' => 'Lugar fisico',
+			'codigosap' => 'Codigo SAP',
+			'codigoaf' => 'Codigo de placa',
+			'descripcion' => 'Descripcion',
+			'marca' => 'Marca',
+			'modelo' => 'Modelo',
+			'serie' => 'Serie',
+			'coddocu'=>'Documento',
+			'clasefoto' => 'Clasefoto',
+			'codigopadre' => 'Codigopadre',
+			'numerodocumento' => 'Numero documento',
+			'adicional' => 'Observacion ',		
+			'posicion' => 'Posicion',
+			'codcentro' => 'Codcentro',
+			'codcentrooriginal' => 'Codcentrooriginal',
+			'codeporiginal' => 'Embarcacion original',
+			'rocoto' => 'Rocoto',
+			'codepanterior' => 'Embarcacion anterior',
+			'codcentroanterior' => 'Codcentroanterior',
+			'clase' => 'Clase',
+			'baja' => 'Baja',
+			'tienecarter'=>'Tiene control de lubricacion',
+			'lugares.deslugar'=>'Lugar',
+			'barcoactual.nomep'=>'Embarcacion origen',
+			'n_direc' => 'N Direc',
+		);
+	}
+
+	
+		/**
+	
+	
+*/
+	
+	
+	
+	public function beforeSave() {
+							if ($this->isNewRecord) {
+									
+									   // $this->codigodoc='032';
+										//$this->coddocu='017';
+									    //$this->numformato=Numeromaximo::numero($this->model(),'numformato','maximovalor',17);
+										
+									} else
+									{
+										 }
+									return parent::beforeSave();
+				}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('idinventario',$this->idinventario,true);
+		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('c_estado',$this->c_estado,true);
+		$criteria->compare('codep',$this->codep,true);
+		$criteria->compare('comentario',$this->comentario,true);
+		$criteria->compare('fecha',$this->fecha,true);
+		$criteria->compare('coddocu',$this->coddocu,true);
+		$criteria->compare('creadopor',$this->creadopor,true);
+		$criteria->compare('creadoel',$this->creadoel,true);
+		$criteria->compare('modificadopor',$this->modificadopor,true);
+		$criteria->compare('modificadoel',$this->modificadoel,true);
+		$criteria->compare('codestado',$this->codestado,true);
+		//$criteria->compare('codlugar',$this->codlugar,true);
+		$criteria->compare('codigosap',$this->codigosap,true);
+		$criteria->compare('codigoaf',$this->codigoaf,true);
+		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('marca',$this->marca,true);
+		$criteria->compare('modelo',$this->modelo,true);
+		$criteria->compare('serie',$this->serie,true);
+		$criteria->compare('clasefoto',$this->clasefoto,true);
+		$criteria->compare('codigopadre',$this->codigopadre,true);
+		$criteria->compare('numerodocumento',$this->numerodocumento,true);
+		$criteria->compare('adicional',$this->adicional,true);
+		$criteria->compare('codigoafant',$this->codigoafant,true);
+		$criteria->compare('posicion',$this->posicion,true);
+		$criteria->compare('codcentro',$this->codcentro,true);
+		$criteria->compare('codcentrooriginal',$this->codcentrooriginal,true);
+		$criteria->compare('codeporiginal',$this->codeporiginal,true);
+		$criteria->compare('rocoto',$this->rocoto,true);
+		$criteria->compare('codepanterior',$this->codepanterior,true);
+		$criteria->compare('codcentroanterior',$this->codcentroanterior,true);
+		$criteria->compare('clase',$this->clase,true);
+		$criteria->compare('baja',$this->baja,true);
+		$criteria->compare('n_direc',$this->n_direc,true);
+		$criteria->compare('tipo',$this->tipo,true);
+		$criteria->compare('codlugar',$this->codlugar_,true);
+		$criteria->compare('t.codlugar', $this->codlugar,true);
+						//$criteriazo->params = array(':idt' => $idt);
+						//$criteria->params = array(':idt'=>$this->codlugar);
+		//$criteria->compare('codlugar',$this->codlugar,true);
+		$criteria->together  =  true;
+		$criteria->with = array('lugares');
+		 if($this->lugares_lugar){
+				$criteria->compare('deslugar',$this->lugares_lugar,true);
+			}
+				$sort=new CSort;
+				$sort->attributes=array(
+										'codlugar',
+									// For each relational attribute, create a 'virtual attribute' using the public variable name
+										'lugares_lugar' => array(
+																	'asc' => 'lugares.deslugar  ASC',
+																	'desc' => 'lugares.deslugar DESC ',
+																	'label' => 'lugares',
+																	),
+										'*',
+										);
+		
+		
+		
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,'sort'=>$sort,'pagination' => array(
+                'pageSize' => 10,
+            ),
+		));
+	}
+	
+	
+	
+	public function search2($codep)
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('idinventario',$this->idinventario,true);
+		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('c_estado',$this->c_estado,true);
+		$criteria->compare('codep',$this->codep,true);
+		$criteria->compare('comentario',$this->comentario,true);
+		$criteria->compare('fecha',$this->fecha,true);
+		$criteria->compare('coddocu',$this->coddocu,true);
+		$criteria->compare('creadopor',$this->creadopor,true);
+		$criteria->compare('creadoel',$this->creadoel,true);
+		$criteria->compare('modificadopor',$this->modificadopor,true);
+		$criteria->compare('modificadoel',$this->modificadoel,true);
+		$criteria->compare('codestado',$this->codestado,true);
+		//$criteria->compare('codlugar',$this->codlugar,true);
+		$criteria->compare('codigosap',$this->codigosap,true);
+		$criteria->compare('codigoaf',$this->codigoaf,true);
+		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('marca',$this->marca,true);
+		$criteria->compare('modelo',$this->modelo,true);
+		$criteria->compare('serie',$this->serie,true);
+		$criteria->compare('clasefoto',$this->clasefoto,true);
+		$criteria->compare('codigopadre',$this->codigopadre,true);
+		$criteria->compare('numerodocumento',$this->numerodocumento,true);
+		$criteria->compare('adicional',$this->adicional,true);
+		$criteria->compare('codigoafant',$this->codigoafant,true);
+		$criteria->compare('posicion',$this->posicion,true);
+		$criteria->compare('codcentro',$this->codcentro,true);
+		$criteria->compare('codcentrooriginal',$this->codcentrooriginal,true);
+		$criteria->compare('codeporiginal',$this->codeporiginal,true);
+		$criteria->compare('rocoto',$this->rocoto,true);
+		$criteria->compare('codepanterior',$this->codepanterior,true);
+		$criteria->compare('codcentroanterior',$this->codcentroanterior,true);
+		$criteria->compare('clase',$this->clase,true);
+		$criteria->compare('baja',$this->baja,true);
+		$criteria->compare('n_direc',$this->n_direc,true);
+		$criteria->compare('tipo',$this->tipo,true);
+		$criteria->addCondition("codep = '".$codep."'");
+		$criteria->addCondition("codlugar = '000015'");
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,'pagination' => array(
+                'pageSize' => 10,
+            ),
+		));
+	}
+	
+	public function search3($codep)
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('idinventario',$this->idinventario,true);
+		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('c_estado',$this->c_estado,true);
+		$criteria->compare('codep',$this->codep,true);
+		$criteria->compare('comentario',$this->comentario,true);
+		$criteria->compare('fecha',$this->fecha,true);
+		$criteria->compare('coddocu',$this->coddocu,true);
+		$criteria->compare('creadopor',$this->creadopor,true);
+		$criteria->compare('creadoel',$this->creadoel,true);
+		$criteria->compare('modificadopor',$this->modificadopor,true);
+		$criteria->compare('modificadoel',$this->modificadoel,true);
+		$criteria->compare('codestado',$this->codestado,true);
+		//$criteria->compare('codlugar',$this->codlugar,true);
+		$criteria->compare('codigosap',$this->codigosap,true);
+		$criteria->compare('codigoaf',$this->codigoaf,true);
+		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('marca',$this->marca,true);
+		$criteria->compare('modelo',$this->modelo,true);
+		$criteria->compare('serie',$this->serie,true);
+		$criteria->compare('clasefoto',$this->clasefoto,true);
+		$criteria->compare('codigopadre',$this->codigopadre,true);
+		$criteria->compare('numerodocumento',$this->numerodocumento,true);
+		$criteria->compare('adicional',$this->adicional,true);
+		$criteria->compare('codigoafant',$this->codigoafant,true);
+		$criteria->compare('posicion',$this->posicion,true);
+		$criteria->compare('codcentro',$this->codcentro,true);
+		$criteria->compare('codcentrooriginal',$this->codcentrooriginal,true);
+		$criteria->compare('codeporiginal',$this->codeporiginal,true);
+		$criteria->compare('rocoto',$this->rocoto,true);
+		$criteria->compare('codepanterior',$this->codepanterior,true);
+		$criteria->compare('codcentroanterior',$this->codcentroanterior,true);
+		$criteria->compare('clase',$this->clase,true);
+		$criteria->compare('baja',$this->baja,true);
+		$criteria->compare('n_direc',$this->n_direc,true);
+		$criteria->compare('tipo',$this->tipo,true);
+		$criteria->addCondition("codep = '".$codep."'");
+		$criteria->addCondition("tienecarter = '1'");
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,'pagination' => array(
+                'pageSize' => 10,
+            ),
+		));
+	}
+	
+}

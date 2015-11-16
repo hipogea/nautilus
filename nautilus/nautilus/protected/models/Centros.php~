@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * This is the model class for table "centros".
+ *
+ * The followings are the available columns in table 'centros':
+ * @property string $codcen
+ * @property string $codsoc
+ * @property string $nomcen
+ * @property string $descricen
+ * @property string $creadopor
+ * @property string $creadoel
+ * @property string $modificadopor
+ * @property string $modificadoel
+ * @property string $n_dir
+ * @property integer $c_planta
+ *
+ * The followings are the available model relations:
+ * @property Usuarios[] $usuarioses
+ * @property Almacenes[] $almacenes
+ */
+class Centros extends CActiveRecord
+{
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return Centros the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'centros';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('codcen, nomcen,codsoc', 'required'),
+			//array('c_planta', 'numerical', 'integerOnly'=>true),
+			array('codcen', 'length', 'max'=>4),
+			array('codsoc', 'length', 'max'=>1),
+			array('nomcen', 'length', 'max'=>35),
+			//array('creadopor, modificadopor', 'length', 'max'=>25),
+			//array('creadoel, modificadoel', 'length', 'max'=>20),
+			array('descricen, n_dir', 'safe'),
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array('codcen, codsoc, nomcen, descricen, creadopor, creadoel, modificadopor, modificadoel, n_dir, c_planta', 'safe', 'on'=>'search'),
+		);
+	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+			'usuarioses' => array(self::HAS_MANY, 'Usuarios', 'centrodefault'),
+			'almacenes' => array(self::HAS_MANY, 'Almacenes', 'codcen'),
+		);
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'codcen' => 'Codcen',
+			'codsoc' => 'Codsoc',
+			'nomcen' => 'Nomcen',
+			'descricen' => 'Descricen',
+			'creadopor' => 'Creadopor',
+			'creadoel' => 'Creadoel',
+			'modificadopor' => 'Modificadopor',
+			'modificadoel' => 'Modificadoel',
+			'n_dir' => 'N Dir',
+			'c_planta' => 'C Planta',
+		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('codcen',$this->codcen,true);
+		$criteria->compare('codsoc',$this->codsoc,true);
+		$criteria->compare('nomcen',$this->nomcen,true);
+		$criteria->compare('descricen',$this->descricen,true);
+		$criteria->compare('creadopor',$this->creadopor,true);
+		$criteria->compare('creadoel',$this->creadoel,true);
+		$criteria->compare('modificadopor',$this->modificadopor,true);
+		$criteria->compare('modificadoel',$this->modificadoel,true);
+		$criteria->compare('n_dir',$this->n_dir,true);
+		$criteria->compare('c_planta',$this->c_planta);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+}
